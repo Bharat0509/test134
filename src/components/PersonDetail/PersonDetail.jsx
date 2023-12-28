@@ -44,7 +44,7 @@ const PersonDetail = () => {
                 {!editable &&
                     <div>
                         <button onClick={handleEdit}>Edit</button>
-                        <button onClick={handleDelete}>Delete</button>
+                        <button onClick={e => setIsModelOpen(true)}>Delete</button>
                     </div>}
 
                 <div className='data'>
@@ -73,8 +73,8 @@ const PersonDetail = () => {
                 </div>
                 {
                     editable && <div style={{ margin: '1rem 0' }}>
-                        <button onClick={e => setIsModelOpen(true)}>Save</button>
-                        <button onClick={(e) => setEditable(false)}>Cancel</button>
+                        <button onClick={handleSave}>Save</button>
+                        <button onClick={(e) => setIsModelOpen(true)}>Cancel</button>
                     </div>
                 }
             </div>
@@ -87,7 +87,7 @@ const PersonDetail = () => {
                         <div>
                             <button onClick={e => setIsModelOpen(false)} className='secondary'>Cancel</button>
 
-                            <button onClick={handleSave}
+                            <button onClick={handleDelete}
                                 className='danger'
                             >Yes</button>
                         </div>
