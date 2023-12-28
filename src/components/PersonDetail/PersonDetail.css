@@ -1,0 +1,27 @@
+.personDetails-container {
+    border: 1px solid black;
+
+    width: 75%;
+}
+.personDetails-container h2 {
+    padding: 1rem;
+    border-bottom: 1px solid black;
+}
+button {
+    background-color: rgba(0, 0, 255, 0.897);
+    padding: 0.5rem;
+    color: white;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    margin-right: 1rem;
+}
+.info {
+    padding: 1rem;
+}
+.data {
+    display: flex;
+    margin-top: 1rem;
+}
+.data > label {
+    width: 10rem;
+}
