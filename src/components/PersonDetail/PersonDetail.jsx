@@ -1,11 +1,12 @@
 import { useFetcher, useNavigate, useParams } from 'react-router-dom';
 import './PersonDetail.css'
 import { useEffect, useState } from 'react';
-import { deleteData, peoplesData } from '../Home/Home';
+import { deleteData, editData, peoplesData } from '../Home/Home';
 
 const PersonDetail = () => {
     const params = useParams()
     const navigate = useNavigate()
+    const [isModelOpen, setIsModelOpen] = useState(false)
     const [person, setPerson] = useState({
         name: "",
         area: "",
@@ -15,25 +16,30 @@ const PersonDetail = () => {
     const [editable, setEditable] = useState(false)
 
 
-    const info = peoplesData.filter(people => (people.id === parseInt(params.id)))
+
 
     const handleEdit = (e) => {
         setEditable(true)
     }
-    const handleSave = () => {
-        console.log(info);
+    const handleSave = (e) => {
+        editData(params.id, person)
+        navigate(-1)
     }
     const handleDelete = (e) => {
-
         deleteData(params.id)
         navigate("/")
     }
+    const handleChange = (e) => {
+        setPerson({ ...person, [e.target.name]: e.target.value })
+    }
+
     useEffect(() => {
+        const info = peoplesData.filter(people => (people.id === parseInt(params.id)))
         setPerson(info[0])
-    }, [info])
+    }, [params.id])
     return (
         <div className='personDetails-container'>
-            <h2>Employee Details</h2>
+            <h2>{editable ? "Edit Employee Details" : "Employee Details"}</h2>
             <div className='info'>
                 {!editable &&
                     <div>
@@ -44,40 +50,51 @@ const PersonDetail = () => {
                 <div className='data'>
                     <label >Name</label>
                     {
-                        !editable ? <span>{info[0]?.name || "name"}</span> : <input type="text" value={person.name} onChange={e => { setPerson({ ...person, name: e.target.value }) }} />
+                        !editable ? <span>: {person?.name}</span> : <input type="text" name='name' value={person.name} onChange={handleChange} />
                     }
                 </div>
                 <div className='data'>
                     <label >Area</label>
                     {
-                        !editable ? <span>{info[0]?.area || "name"}</span> : <input type="text" value={info[0]?.area} onChange={e => {
-                            info[0].area = e.target.value
-                        }} />
+                        !editable ? <span>: {person?.area}</span> : <input type="text" name='area' value={person.area} onChange={handleChange} />
                     }
                 </div>
                 <div className='data'>
                     <label >Contact No</label>
                     {
-                        !editable ? <span>{info[0]?.contact_no || "name"}</span> : <input type="text" value={info[0]?.contact_no} onChange={e => {
-                            info[0].contact_no = e.target.value
-                        }} />
+                        !editable ? <span>: {person?.contact_no}</span> : <input type="number" maxLength={10} name='contact_no' value={person.contact_no} onChange={handleChange} />
                     }
                 </div>
                 <div className='data'>
                     <label >Experience Year</label>
                     {
-                        !editable ? <span>{info[0]?.exp || "name"}</span> : <input type="text" value={info[0]?.exp} onChange={e => {
-                            info[0].exp = e.target.value
-                        }} />
+                        !editable ? <span>: {person?.exp}</span> : <input type="number" name='exp' value={person?.exp} onChange={handleChange} />
                     }
                 </div>
                 {
                     editable && <div style={{ margin: '1rem 0' }}>
-                        <button onClick={handleSave}>Save</button>
-                        <button onClick={(e) => setEditable(false)}>Cancle</button>
+                        <button onClick={e => setIsModelOpen(true)}>Save</button>
+                        <button onClick={(e) => setEditable(false)}>Cancel</button>
                     </div>
                 }
             </div>
+            {
+                isModelOpen &&
+                <div className="modal-container">
+                    <div className="modal">
+                        <p>Are you sure you
+                            want to delete this item?</p>
+                        <div>
+                            <button onClick={e => setIsModelOpen(false)} className='secondary'>Cancel</button>
+
+                            <button onClick={handleSave}
+                                className='danger'
+                            >Yes</button>
+                        </div>
+                    </div>
+
+                </div>
+            }
         </div>
     )
 }
